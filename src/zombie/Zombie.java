@@ -6,6 +6,7 @@
 package zombie;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,22 +26,24 @@ public class Zombie {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // TODO code application logic here
         ArrayList<List> fileproperties = new ArrayList<>();
-        List<String> filenames = new ArrayList<>();
+        List<String> filedata = new ArrayList<>();
         File[] files =  new File("/home/fegati/Downloads/zombie-inbox/Inbox").listFiles();
+        FileWriter fileWriter = new FileWriter("/home/fegati/NetBeansProjects/Zombie/output/data.csv");
         
         
         for(int i = 0; i < files.length; i++){
             if(files[i].isFile()){
                 String[] tokens = (files[i].getName()).split("[-_;.]");
                 String filename = (tokens[tokens.length - 2]).trim();
-                filenames.add(files[i].getName());
+                filedata.add(filename);
                 Path p = Paths.get(files[i].getAbsolutePath());
                 try {
                     BasicFileAttributes attributes = Files.readAttributes(p, BasicFileAttributes.class);
                     String[] closeddate = ((attributes.lastModifiedTime()).toString()).split("[T]");
+                    filedata.add(closeddate[0]);
                     System.out.println("filename: "+filename+"   closed: "+closeddate[0]);
                 } catch (IOException ex) {
                     Logger.getLogger(Zombie.class.getName()).log(Level.SEVERE, null, ex);
